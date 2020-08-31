@@ -1,35 +1,33 @@
-class LinksController < ApplicationController
-  before_action :set_link, only: [:show, :edit, :update, :destroy]
+# frozen_string_literal: true
 
-  # GET /links
-  # GET /links.json
+# :Links Controller for handling Links Actions:
+class LinksController < ApplicationController
+  before_action :set_link, only: %i[destroy]
+
   def index
     @links = Link.all
   end
 
-  # GET /links/1
-  # GET /links/1.json
   def show
-    @link = Link.find_by_slug(params[:slug]) 
-    render 'errors/404', status: 404 if @link.nil?
-    @link.update_attribute(:clicked, @link.clicked + 1)
-    redirect_to @link.url
+    @link = Link.find_by_slug(params[:slug])
+    if @link.nil?
+      redirect_to links_path, notice: 'Link does not exist.'
+    else
+      update_link_attribute(@link)
+    end
   end
 
-  # GET /links/new
+  def update_link_attribute(link)
+    link.update_attribute(:clicked, link.clicked + 1)
+  end
+
   def new
     @link = Link.new
   end
 
-  # GET /links/1/edit
-  def edit
-  end
-
-  # POST /links
-  # POST /links.json
   def create
     @link = Link.new(link_params)
-
+    Link.shorten(@link.url)
     respond_to do |format|
       if @link.save
         format.html { redirect_to @link, notice: 'Link was successfully created.' }
@@ -41,22 +39,6 @@ class LinksController < ApplicationController
     end
   end
 
-  # PATCH/PUT /links/1
-  # PATCH/PUT /links/1.json
-  def update
-    respond_to do |format|
-      if @link.update(link_params)
-        format.html { redirect_to @link, notice: 'Link was successfully updated.' }
-        format.json { render :show, status: :ok, location: @link }
-      else
-        format.html { render :edit }
-        format.json { render json: @link.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # DELETE /links/1
-  # DELETE /links/1.json
   def destroy
     @link.destroy
     respond_to do |format|
@@ -66,13 +48,14 @@ class LinksController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_link
-      @link = Link.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def link_params
-      params.require(:link).permit(:url, :slug, :clicked)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_link
+    @link = Link.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def link_params
+    params.require(:link).permit(:url, :slug)
+  end
 end

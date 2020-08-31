@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  Rails.application.routes.default_url_options[:host] = 'http://localhost:3000/'
   resources :links
   get '/s/:slug', to: 'links#show', as: :short
 end

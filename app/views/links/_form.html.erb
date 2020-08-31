@@ -2,7 +2,6 @@
   <% if link.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(link.errors.count, "error") %> prohibited this link from being saved:</h2>
-
       <ul>
         <% link.errors.full_messages.each do |message| %>
           <li><%= message %></li>
@@ -19,11 +18,6 @@
   <div class="field">
     <%= form.label :slug %>
     <%= form.text_field :slug %>
-  </div>
-
-  <div class="field">
-    <%= form.label :clicked %>
-    <%= form.number_field :clicked %>
   </div>
 
   <div class="actions">
