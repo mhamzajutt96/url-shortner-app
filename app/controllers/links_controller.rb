@@ -27,24 +27,18 @@ class LinksController < ApplicationController
 
   def create
     @link = Link.new(link_params)
-    Link.shorten(@link.url)
-    respond_to do |format|
-      if @link.save
-        format.html { redirect_to @link, notice: 'Link was successfully created.' }
-        format.json { render :show, status: :created, location: @link }
-      else
-        format.html { render :new }
-        format.json { render json: @link.errors, status: :unprocessable_entity }
-      end
+    if @link.save
+      # Link.shorten(@link.url)
+      redirect_to short_path(@link.slug), notice: 'Link was successfully created.'
+    else
+      render :new
     end
   end
 
   def destroy
-    @link.destroy
-    respond_to do |format|
-      format.html { redirect_to links_url, notice: 'Link was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    return unless @link.destroy
+
+    redirect_to links_url, notice: 'Link was successfully destroyed.'
   end
 
   private
