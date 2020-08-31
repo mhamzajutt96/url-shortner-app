@@ -5,7 +5,7 @@ class LinksController < ApplicationController
   before_action :set_link, only: %i[destroy]
 
   def index
-    @links = Link.all
+    @links = Link.order(clicked: :DESC)
   end
 
   def show

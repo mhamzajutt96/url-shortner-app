@@ -12,6 +12,7 @@
     <% @links.each do |link| %>
       <tr>
         <td><%= link.url %></td>
+        <td><%= link.shorten %></td>
         <td><%= link.slug %></td>
         <td><%= link.clicked %></td>
         <td><%= link_to 'Show', short_path(link.slug) %></td>

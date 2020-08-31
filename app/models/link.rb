@@ -15,6 +15,10 @@ class Link < ApplicationRecord
     Rails.application.routes.url_helpers.short_url(slug: self.slug)
   end
 
+  def shorten
+    Link.where(url: url, slug: slug).first.short
+  end
+  
   # Callbacks
   before_validation :generate_slug
   
