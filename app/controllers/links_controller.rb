@@ -28,7 +28,6 @@ class LinksController < ApplicationController
   def create
     @link = Link.new(link_params)
     if @link.save
-      # Link.shorten(@link.url)
       redirect_to short_path(@link.slug), notice: 'Link was successfully created.'
     else
       render :new
