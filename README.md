@@ -22,7 +22,7 @@ This simple project contains the a url shortener, through which we will be able 
     
 #### Approach to create url-shortner
   
-  * The approach is too basic, you just need to create a model that will store the links for the application, the model contains the basic fields such as url, slug and clicked attributes. After model creation setup a flow to create a link and then generate a short link using the slug attribute. Pass the slug in the params of the url and get the link using that slug, to display the short version of the url you can write a simple function that just displays the short url, although you can save it to the database but it is just for a learning purpose and we need to get the job done and understand the concept, so not permitting it to the database.
+  * The approach is too basic, you just need to create a model that will store the links for the application, the model contains the basic fields such as original_url, short_url and clicked attributes. After model creation setup a flow to create a original_url and then generate a short link using the random creation.
   * For applications that are on high scale we needs to have more functionlity rather than just this simple conversion, so this is just a concept of what the url-shortner is, If you want to use something like this in a high scale app, check some gems like friendly_id which are seo-supported and provides a lot more functionlity.
   
 ##### Till then, Stay tunned.
