@@ -2,27 +2,35 @@
 
 # :Link Model containing the validations and callbacks:
 class Link < ApplicationRecord
+  UNIQUE_ID_LENGTH = 6
+  validates :original_url, presence: true, on: :create
+  validates :original_url, format: URI::regexp(%w[http https])
+  before_create :generate_short_url, :sanitize
   
-  # Validations
-  validates_presence_of :url
-  validates :url, format: URI::regexp(%w[http https])
-  validates_uniqueness_of :slug
-  validates_length_of :url, within: 3..255, on: :create, message: 'is too long'
-  validates_length_of :slug, within: 3..255, on: :create, message: 'is too long'
-
-  # Actions
-  def short
-    Rails.application.routes.url_helpers.short_url(slug: self.slug)
+  # GENERATE A UNIQUE URL FOR GIVEN WEB ADDRESS BEFORE SAVING INTO DATABASE
+  def generate_short_url
+    url = SecureRandom.uuid[0..5]
+    old_url = Link.where(short_url: url).last
+    if old_url.present?
+      self.generate_short_url
+    else
+      self.short_url = url
+    end
   end
 
-  def shorten
-    Link.where(url: url, slug: slug).first.short
+  # CHECK IF ANY URL EXIST BEFORE SAVING IT TO DATABASE
+  def find_duplicate
+    Link.find_by_sanitize_url(self.sanitize_url)
+  end
+
+  def new_url?
+    find_duplicate.nil?
   end
   
-  # Callbacks
-  before_validation :generate_slug
-  
-  def generate_slug
-    self.slug = SecureRandom.uuid[0..5] if self.slug.nil? || self.slug.empty?
+  # SANITIZE THE USER GIVEN URL
+  def sanitize
+    self.original_url.strip!
+    self.sanitize_url = self.original_url.downcase.gsub(/(https?:\/\/)|(www\.)/, "")
+    self.sanitize_url = "http://#{self.sanitize_url}"
   end
 end

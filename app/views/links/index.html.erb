@@ -2,8 +2,8 @@
 <table class="table">
   <thead>
     <tr>
-      <th>Url</th>
-      <th>Slug</th>
+      <th>Original Url</th>
+      <th>Short Url</th>
       <th>Total Clicked</th>
       <th colspan="2">Actions</th>
     </tr>
@@ -11,15 +11,14 @@
   <tbody>
     <% @links.each do |link| %>
       <tr>
-        <td><%= link.url %></td>
-        <td><%= link.shorten %></td>
-        <td><%= link.slug %></td>
+        <td><%= link.original_url %></td>
+        <td><%= link_to request.host + '/' + link.short_url, "/#{link.short_url}" %></td>
         <td><%= link.clicked %></td>
-        <td><%= link_to 'Show', short_path(link.slug) %></td>
-        <td><%= link_to 'Destroy', link, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to 'Show', shortened_path(short_url: link.short_url), class: 'btn btn-primary btn-sm' %></td>
+        <td><%= link_to 'Destroy', link, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-primary btn-sm' %></td>
       </tr>
     <% end %>
   </tbody>
 </table>
 <br>
-<%= link_to 'New Link', new_link_path %>
+<%= link_to 'New Link', new_link_path, class: 'btn btn-primary btn-sm' %>

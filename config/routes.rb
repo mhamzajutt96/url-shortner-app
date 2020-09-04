@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
-  Rails.application.routes.default_url_options[:host] = 'http://localhost:3000/'
+  root 'links#index'
   resources :links, except: %i[show edit update]
-  get '/s/:slug', to: 'links#show', as: :short
+  get '/:short_url', to: 'links#show'
+  get 'shortened/:short_url', to: 'links#shortened', as: :shortened
+  get 'links/fetch_original_url'
 end

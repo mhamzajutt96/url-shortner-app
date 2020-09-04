@@ -11,15 +11,13 @@
   <% end %>
   <div class="form-group">
     <div class="row">
-      <div class="col-md-6">
-        <%= form.label :type_url %>
-        <%= form.text_field :url, class: 'form-control' %>
+      <div class="col-md-12">
+        <%= form.label :type_original_url %>
+        <%= form.text_field :original_url, class: 'form-control' %>
       </div>
-      <div class="col-md-6">
-        <%= form.label :type_slug %>
-        <%= form.text_field :slug, class: 'form-control' %>
-      </div>
-      <div class="col-md-12 mt-2 text-center">
+    </div>
+    <div class="row">
+      <div class="col-md-6 mt-2">
         <%= form.submit 'Create Link', class: 'btn btn-primary btn-block' %>
       </div>
     </div>
